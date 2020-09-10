@@ -55,9 +55,9 @@ class MainScreen extends React.Component {
     return (
         <TouchableOpacity
             onPress={() => {this.navigateDetails(item)}}
-            activeOpacity={0.1}
+            activeOpacity={0.7}
         >
-            <FitImage source={{uri: item.thumbs.original}} style={styles.image}></FitImage>
+            <FitImage source={{uri: item.thumbs.original}} style={styles.image} borderRadius={5}></FitImage>
         </TouchableOpacity>
     )
   }
@@ -69,7 +69,7 @@ class MainScreen extends React.Component {
           <FlatList
             data={this.state.data}
             renderItem={({item}) => this.renderItem(item)}
-            keyExtractor={(item, index) => {index.toString()}}
+            keyExtractor={(item, index) => index.toString()}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.isLoadingData}
