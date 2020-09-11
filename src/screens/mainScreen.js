@@ -3,16 +3,13 @@ import styled from 'styled-components/native';
 import {View, Text, SafeAreaView, Image, FlatList, RefreshControl, Alert, TouchableOpacity, StyleSheet} from 'react-native'
 import { StatusBar } from 'expo-status-bar';
 import FitImage from 'react-native-fit-image'
-
+import {connect} from 'react-redux';
+import * as Types from '../constants/types';
+import * as Actions from '../actions/photo';
 class MainScreen extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      isLoadingData: false,
-      currentPage: 2,
-      data: [],
-    }
   }
 
 
@@ -20,36 +17,12 @@ class MainScreen extends React.Component {
     this.props.navigation.navigate('Details', {photo})
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if(prevProps !== this.props)
-      this.onRefresh()
-  }
-
   componentDidMount() {
     this.onRefresh()
   }
 
   onRefresh() {
-    this.setState({isLoadingData: true})
-    fetch(`https://wallhaven.cc/api/v1/search?categories=111&page=${this.state.currentPage}`)
-    .then(json => json.json())
-    .then(resp => {
-      this.setState({data: resp.data, isLoadingData: false})
-    })
-    .catch(err => {
-      this.setState({isLoadingData: false})
-      console.log(err)
-      Alert.alert(
-        "Ошибка!",
-        err,
-        [
-          {
-            text: "Ok"
-          }
-        ]
-      )
-
-    })
+    this.props.fetchData(this.props.photo);
   }
   renderItem(item) {
     return (
@@ -64,20 +37,20 @@ class MainScreen extends React.Component {
 
   render() {
     return (
-      <StyledContainer>
-        <StatusBar style="auto"></StatusBar>
-          <FlatList
-            data={this.state.data}
-            renderItem={({item}) => this.renderItem(item)}
-            keyExtractor={(item, index) => index.toString()}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isLoadingData}
-                onRefresh={() => this.onRefresh()}
-              ></RefreshControl>
-            }
-          ></FlatList>
-      </StyledContainer>
+        <StyledContainer>
+          <StatusBar style="auto"></StatusBar>
+            <FlatList
+              data={this.props.photo.data}
+              renderItem={({item}) => this.renderItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.props.photo.isLoadingData}
+                  onRefresh={() => this.onRefresh()}
+                ></RefreshControl>
+              }
+            ></FlatList>
+        </StyledContainer>
     )
   }
 
@@ -104,4 +77,15 @@ const StyledContainer = styled.SafeAreaView`
 //   resize-mode: cover;
 // `;
 
-export default MainScreen;
+const mapStateToProps = (state) => {
+  const photo = state;
+  return photo;
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (state) => {dispatch(Actions.loadData(state))}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

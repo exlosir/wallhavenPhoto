@@ -22,7 +22,6 @@ class FileStorageImage {
         this.#name = temp[temp.length-2].split('/').pop();
         this.#extensionPhoto = this.#uri.split('.').pop();
         this.#fileName = this.#name + "." +this.#extensionPhoto;
-        console.log(this.#name)
     }
 
     askPermissionForSave = async () => {
