@@ -4,3 +4,4 @@ export const SEARCH = 'search';
 export const LOAD_DATA_SUCCESS = 'load_data';
 export const LOAD_DATA_START = 'load_data_start';
 export const LOAD_DATA_FAILURE = 'load_data_failure';
+export const SET_PAGE = 'set_page';

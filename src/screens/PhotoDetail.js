@@ -7,7 +7,7 @@ import Toast from 'react-native-tiny-toast';
 
 
 const win = Dimensions.get('window');
-export default class Photo extends React.Component {
+export default class PhotoDetail extends React.Component {
 
     constructor(props) {
         super(props);

@@ -29,6 +29,9 @@ const reducer = (state = initialState, action) => {
             return Handlers.fetchDataStart(state);
         case Types.LOAD_DATA_FAILURE:
             return Handlers.fetchDataFailure(state);
+        case Types.SET_PAGE:
+            state.filters.page = action.payload;
+            return state
         default:
             return state;
     }

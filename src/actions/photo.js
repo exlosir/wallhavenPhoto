@@ -15,6 +15,20 @@ export const changeTopRange = (topRange) => (
     }
 );
 
-export const loadData = (state) => {
-    return Handlers.fetchData(state)
+export const loadData = (state, loadMore) => {
+    return Handlers.fetchData(state, loadMore)
+}
+
+export const loadMore = (state) => {
+    return (dispatch, getState) => {
+        dispatch(setPage(++state.filters.page));
+        dispatch(loadData(state, true))
+    }
+}
+
+export const setPage = (page) => {
+    return {
+        type: Types.SET_PAGE,
+        payload: page
+    }
 }

@@ -9,13 +9,21 @@ export const changeRopRange = () => {
 
 }
 
-export const fetchData = (state) => {
+export const fetchData = (state, loadMore) => {
     return (dispatch, getState) => {
         var uriBuilder = new UriBuilder(state.uri, state.filters)
         var uri = uriBuilder.build();
         dispatch({type: Types.LOAD_DATA_START})
         fetch(uri).then(js => js.json()).then(rsp => {
-            dispatch({type: Types.LOAD_DATA_SUCCESS, payload: rsp.data})
+            var response;
+            if(!loadMore) {
+                dispatch({type: Types.SET_PAGE, payload: 1})
+                response = rsp.data;
+            }else {
+                state.data.push({type: 'page_delimiter', page: state.filters.page - 1});
+                response = [...state.data, ...rsp.data];
+            }
+            dispatch({type: Types.LOAD_DATA_SUCCESS, payload: response})
         })
         .catch(err => {
             dispatch({type: Types.LOAD_DATA_FAILURE})
