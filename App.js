@@ -1,19 +1,20 @@
 import React from 'react';
-import styled from 'styled-components/native';
-import {View, Text, SafeAreaView, Image, FlatList, RefreshControl, Alert} from 'react-native'
-import { StatusBar } from 'expo-status-bar';
-import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+/* Icons */
+import {FontAwesome} from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 /* Screens */
-import MainScreen from './src/screens/MainScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
-import PhotoDetail from './src/screens/PhotoDetail';
+import MainNavigator from './src/navigators/MainNavigator';
+import HelpScreen from './src/screens/HelpScreen';
 
 import {Provider, connect} from 'react-redux';
 import configureStore from './src/store';
 
-const Stack = createStackNavigator();
+const Tabs = createBottomTabNavigator();
 
 class App extends React.Component {
 
@@ -21,11 +22,29 @@ class App extends React.Component {
     return (
       <Provider store={configureStore}>
         <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Home" component={MainScreen} options={{title: "Главная"}}></Stack.Screen>
-            <Stack.Screen name="Settings" component={SettingsScreen} options={{title: "Настройки"}}></Stack.Screen>
-            <Stack.Screen name="Details" component={PhotoDetail} options={{title: "О Фото"}}></Stack.Screen>
-          </Stack.Navigator>
+          <Tabs.Navigator>
+            <Tabs.Screen
+              name='Home'
+              component={MainNavigator}
+              options={{
+                tabBarLabel: "Главная",
+                tabBarIcon: () => (<FontAwesome name="home" size={24} color="black" />)
+                }}></Tabs.Screen>
+            <Tabs.Screen
+              name='Settings'
+              component={SettingsScreen}
+              options={{
+                tabBarLabel: "Настройки",
+                tabBarIcon: () => (<MaterialIcons name="settings" size={24} color="black" />)
+                }}></Tabs.Screen>
+            <Tabs.Screen
+              name='Help'
+              component={HelpScreen}
+              options={{
+                tabBarLabel: "Помощь",
+                tabBarIcon: () => (<MaterialIcons name="help" size={24} color="black" />)
+                }}></Tabs.Screen>
+          </Tabs.Navigator>
         </NavigationContainer>
       </Provider>
     )

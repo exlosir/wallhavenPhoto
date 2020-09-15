@@ -1,27 +1,24 @@
 import UriBuilder from '../../service/UriBuilder';
 import * as Types from '../../constants/types';
-
-export const changeCategory = () => {
-
-}
-
-export const changeRopRange = () => {
-
-}
-
+import { Toast } from 'react-native-tiny-toast';
 export const fetchData = (state, loadMore) => {
     return (dispatch, getState) => {
         var uriBuilder = new UriBuilder(state.uri, state.filters)
         var uri = uriBuilder.build();
+        if(!loadMore)
+            dispatch({type: Types.SET_PAGE, payload: 1});
         dispatch({type: Types.LOAD_DATA_START})
         fetch(uri).then(js => js.json()).then(rsp => {
             var response;
-            if(!loadMore) {
-                dispatch({type: Types.SET_PAGE, payload: 1})
-                response = rsp.data;
+            if(loadMore) {
+                if(rsp.data.length > 0) {
+                    response = [...state.data, {type: 'page_delimiter', page: state.filters.page}, ...rsp.data];
+                }else {
+                    console.log('Данных нет больше')
+                    response = [...state.data];
+                }
             }else {
-                state.data.push({type: 'page_delimiter', page: state.filters.page - 1});
-                response = [...state.data, ...rsp.data];
+                response = rsp.data;
             }
             dispatch({type: Types.LOAD_DATA_SUCCESS, payload: response})
         })

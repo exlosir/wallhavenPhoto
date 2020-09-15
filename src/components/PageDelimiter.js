@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import {Text} from 'native-base';
 import styled from 'styled-components'
 
 export default class PageDelimiter extends React.Component {
-
     constructor(props) {
         super(props)
     }
@@ -11,7 +11,7 @@ export default class PageDelimiter extends React.Component {
         return (
             <Container>
                 <Line></Line>
-                <Text style={{fontSize: 16}}>{this.props.page}</Text>
+                    <Text style={{fontSize: 16}}>{this.props.page}</Text>
                 <Line></Line>
             </Container>
         )
@@ -24,6 +24,7 @@ const Container = styled.View`
     align-items: center;
     justify-content: center;
     margin: 15px 0px;
+    margin-bottom: 20px;
 `;
 
 const Line = styled.View`
@@ -32,6 +33,6 @@ const Line = styled.View`
     background-color: #000;
     margin: 0px 20px
 `;
-const Number = styled.Text`
-    margin: 0px 10px;
-`;
+// const Number = styled.Text`
+//     margin: 0px 10px;
+// `;

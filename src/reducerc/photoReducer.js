@@ -15,14 +15,21 @@ const initialState = {
         topRange: WallhavenTypes.TOP_RANGE.ONE_MONTH,
         sorting: WallhavenTypes.SORTING.TOP_LIST,
         page: 1,
+        q: ""
     }
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
         case Types.CHANGE_TOP_RANGE:
+            state.filters.topRange = action.payload;
+            return state;
         case Types.CHANGE_CATEGORY:
-        case Types.SEARCH:
+            state.filters.categories = action.payload;
+            return state;
+        case Types.CHANGE_SORTING:
+            state.filters.sorting = action.payload;
+            return state;
         case Types.LOAD_DATA_SUCCESS:
             return Handlers.fetchDataSuccess(state, action.payload);
         case Types.LOAD_DATA_START:
@@ -31,7 +38,10 @@ const reducer = (state = initialState, action) => {
             return Handlers.fetchDataFailure(state);
         case Types.SET_PAGE:
             state.filters.page = action.payload;
-            return state
+            return state;
+        case Types.SEARCH:
+            state.filters.q = action.payload;
+            return state;
         default:
             return state;
     }
